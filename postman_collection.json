@@ -1,0 +1,84 @@
+{
+  "info": {
+    "name": "SLS Backend Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\": \"Shivamani\", \"phoneNumber\": \"+919876543210\", \"password\": \"pass123\"}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/auth/register"
+        }
+      }
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"phoneNumber\": \"+919876543210\", \"password\": \"pass123\"}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/auth/login"
+        }
+      }
+    },
+    {
+      "name": "Add Subject",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{TOKEN}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"subjectName\": \"Java Learning\", \"startDate\": \"2025-11-15\", \"startTime\": \"20:00\", \"topics\": \"class,object,operators,inheritance\"}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/subjects"
+        }
+      }
+    },
+    {
+      "name": "Get Topics by Subject",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{TOKEN}}"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/api/topics/bySubject/{{SUBJECT_ID}}"
+        }
+      }
+    }
+  ]
+}
