@@ -1,7 +1,10 @@
 
 package com.learningplanner.service;
-import com.learningplanner.dto.TopicUpdateRequest; import com.learningplanner.entity.Topic; import com.learningplanner.repository.TopicRepository;
-import org.springframework.beans.factory.annotation.Autowired; import org.springframework.stereotype.Service;
+import com.learningplanner.dto.TopicUpdateRequest; 
+import com.learningplanner.entity.Topic; 
+import com.learningplanner.repository.TopicRepository;
+import org.springframework.beans.factory.annotation.Autowired; 
+import org.springframework.stereotype.Service;
 import java.time.LocalDate; import java.time.LocalTime;
 @Service public class TopicService {
     @Autowired private TopicRepository topicRepository;
