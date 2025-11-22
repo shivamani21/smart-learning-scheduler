@@ -1,4 +1,3 @@
-
 package com.learningplanner;
 
 import org.springframework.boot.SpringApplication;

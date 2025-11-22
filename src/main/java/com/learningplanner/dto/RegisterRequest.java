@@ -1,7 +1,32 @@
-
 package com.learningplanner.dto;
-public class RegisterRequest { private String name; private String phoneNumber; private String password;
- public String getName(){return name;} public void setName(String n){this.name=n;}
- public String getPhoneNumber(){return phoneNumber;} public void setPhoneNumber(String p){this.phoneNumber=p;}
- public String getPassword(){return password;} public void setPassword(String pw){this.password=pw;}
+
+public class RegisterRequest {
+
+    private String name;
+    private String phoneNumber;
+    private String password;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
