@@ -28,8 +28,8 @@ public class SubjectService {
 
     public Subject addSubject(String phoneNumber, SubjectRequest req) {
 
-        User user = userRepository.findByPhoneNumber(phoneNumber)
-                .orElseThrow();
+    	User user = userRepository.findByPhoneNumber(phoneNumber)
+    	        .orElseThrow(() -> new IllegalArgumentException("Invalid user"));
 
         // Create subject
         Subject subject = new Subject();
