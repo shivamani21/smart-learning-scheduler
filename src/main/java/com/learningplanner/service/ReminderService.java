@@ -21,67 +21,87 @@ public class ReminderService {
         this.whatsappService = whatsappService;
     }
 
-    private void sendWhatsApp(String to, String body) {
-        whatsappService.sendWhatsAppMessage(to, body);
-    }
-
     public void processReminders() {
 
         LocalDate today = LocalDate.now();
-        List<Topic> topics = topicRepository.findByStatusAndScheduledDate(
-                Topic.Status.PENDING,
-                today
-        );
-
         LocalDateTime now = LocalDateTime.now();
+
+        List<Topic> topics =
+                topicRepository.findByStatusAndScheduledDate(
+                        Topic.Status.PENDING, today);
 
         for (Topic t : topics) {
 
-            LocalDateTime dt =
+            LocalDateTime taskTime =
                     LocalDateTime.of(t.getScheduledDate(), t.getScheduledTime());
 
             String phone = t.getSubject().getUser().getPhoneNumber();
 
-            // ✔ 1 hour reminder
-            if (!t.isSms1hrSent() &&
-                    (now.plusHours(1).isAfter(dt) || now.plusHours(1).isEqual(dt))) {
+            // ===============================
+            // 1️⃣ 1-HOUR REMINDER (ONLY ONCE)
+            // ===============================
+            if (!t.isSms1hrSent()) {
 
-                sendWhatsApp(
-                        phone,
-                        "⏳ *Reminder:* '" + t.getTopicName() +
-                                "' starts in *1 hour* at " + t.getScheduledTime()
-                );
+                LocalDateTime oneHourBefore = taskTime.minusHours(1);
 
-                t.setSms1hrSent(true);
-                topicRepository.save(t);
+                if (!now.isBefore(oneHourBefore) &&
+                    now.isBefore(oneHourBefore.plusMinutes(1))) {
+
+                    whatsappService.sendWhatsAppMessage(
+                            phone,
+                            "⏳ Reminder: '" + t.getTopicName() +
+                                    "' starts in 1 hour at " + t.getScheduledTime()
+                    );
+
+                    t.setSms1hrSent(true);
+                    topicRepository.save(t);
+                    continue;
+                }
             }
 
-            // ✔ 10-minute reminder
-            if (!t.isSms10minSent() &&
-                    (now.plusMinutes(10).isAfter(dt) || now.plusMinutes(10).isEqual(dt))) {
+            // ===============================
+            // 2️⃣ 10-MIN REMINDER (ONLY ONCE)
+            // ===============================
+            if (!t.isSms10minSent()) {
 
-                sendWhatsApp(
-                        phone,
-                        "⏳ *Reminder:* '" + t.getTopicName() +
-                                "' starts in *10 minutes* at " + t.getScheduledTime()
-                );
+                LocalDateTime tenMinBefore = taskTime.minusMinutes(10);
 
-                t.setSms10minSent(true);
-                topicRepository.save(t);
-            }
+                if (!now.isBefore(tenMinBefore) &&
+                    now.isBefore(tenMinBefore.plusMinutes(1))) {
 
-            // ✔ Completion reminder
-            if (t.getStatus() == Topic.Status.COMPLETED &&
-                    !t.isCompletionSmsSent()) {
+                    whatsappService.sendWhatsAppMessage(
+                            phone,
+                            "⏳ Reminder: '" + t.getTopicName() +
+                                    "' starts in 10 minutes at " + t.getScheduledTime()
+                    );
 
-                sendWhatsApp(
-                        phone,
-                        "✅ *Completed:* '" + t.getTopicName() + "' completed successfully!"
-                );
-
-                t.setCompletionSmsSent(true);
-                topicRepository.save(t);
+                    t.setSms10minSent(true);
+                    topicRepository.save(t);
+                }
             }
         }
     }
+
+    // ===============================
+    // 3️⃣ COMPLETION MESSAGE (ONLY ONCE)
+    // ===============================
+    public void sendCompletionMessage(Topic t) {
+
+        if (t.isCompletionSmsSent()) return;
+
+        String phone = t.getSubject().getUser().getPhoneNumber();
+
+        whatsappService.sendWhatsAppMessage(
+                phone,
+                "✅ Completed: '" + t.getTopicName() + "' completed successfully!"
+        );
+
+        t.setCompletionSmsSent(true);
+        t.setSms1hrSent(true);
+        t.setSms10minSent(true);
+
+        topicRepository.save(t);
+    }
+
+
 }

@@ -1,20 +1,20 @@
 package com.learningplanner.dto;
 
 public class TopicRequest {
-    private String topics; 
+    private String topicName; 
     private String scheduledDate;
     private String scheduledTime;
-    private String status; // PENDING or COMPLETED
     private boolean sms1hrSent;
     private boolean sms10minSent;
     private boolean completionSmsSent;
+    private String status; // PENDING or COMPLETED
 
-    public String getTopics() {
-        return topics;
+    public String getTopicName() {
+        return topicName;
     }
 
-    public void setTopics(String topics) {
-        this.topics = topics;
+    public void setTopicName(String topicname) {
+        this.topicName = topicname;
     }
 
     public String getScheduledDate() {
