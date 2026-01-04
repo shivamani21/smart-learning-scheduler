@@ -32,13 +32,6 @@ public class SubjectController {
 
     @Autowired
     private com.learningplanner.repository.SubjectRepository subjectRepository;
-
-//    @GetMapping
-//    public ResponseEntity<?> getMine(Authentication authentication) {
-//        String phone = authentication.getName();
-//        return ResponseEntity.ok(subjectRepository.findAll());
-//    }
-    
     @GetMapping
     public ResponseEntity<?> getMine(Authentication authentication) {
         String phone = authentication.getName();

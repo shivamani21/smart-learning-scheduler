@@ -69,8 +69,6 @@ public class TopicService {
         return savedTopic;
     }
 
-
-
     public List<Topic> addTopic(Long subjectId, TopicRequest req) {
 
         Subject subject = subjectRepository.findById(subjectId)
@@ -117,5 +115,4 @@ public class TopicService {
 
         return topic;
     }
-
 }

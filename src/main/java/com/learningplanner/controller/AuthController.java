@@ -48,8 +48,8 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody RegisterRequest req) {
 
         // Normalize phone number before saving
-        String formatted = normalizePhone(req.getPhoneNumber());
-        req.setPhoneNumber(formatted);
+        String formattedNumber = normalizePhone(req.getPhoneNumber());
+        req.setPhoneNumber(formattedNumber);
 
         User user = authService.register(req);
         return ResponseEntity.ok(user);
