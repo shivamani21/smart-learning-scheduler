@@ -44,22 +44,26 @@ public class SecurityConfig {
 
         http.csrf().disable()
 
-                .cors().configurationSource(corsConfigurationSource()) // <-- IMPORTANT
+            .cors().configurationSource(corsConfigurationSource())
 
-                .and()
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().authenticated()
-                )
+            .and()
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers(
+                            "/api/auth/**",
+                            "/health"
+                    ).permitAll()
+                    .anyRequest().authenticated()
+            )
 
-                .sessionManagement(sess -> sess
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+            .sessionManagement(sess -> sess
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            );
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
 
     // 🔥 THIS METHOD FIXES YOUR CORS COMPLETELY
     @Bean
