@@ -70,7 +70,10 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cors = new CorsConfiguration();
 
-        cors.setAllowedOrigins(List.of("http://localhost:5173"));
+        cors.setAllowedOrigins(List.of(
+            "http://localhost:5173",
+            "https://spectacular-semifreddo-a6f309.netlify.app"
+        ));
         cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         cors.setAllowedHeaders(List.of("*"));
         cors.setAllowCredentials(true);
@@ -79,4 +82,5 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", cors);
         return source;
     }
+
 }
