@@ -11,44 +11,51 @@ import java.util.Map;
 @Service
 public class WhatsAppMessageService {
 
-    @Value("${whatsapp.api.url}")
-    private String apiUrl;
+	@Value("${whatsapp.api.url:}")
+	private String apiUrl;
 
-    @Value("${whatsapp.phone.number.id}")
-    private String phoneNumberId;
+	@Value("${whatsapp.phone.number.id:}")
+	private String phoneNumberId;
 
-    @Value("${whatsapp.access.token}")
-    private String accessToken;
+	@Value("${whatsapp.access.token:}")
+	private String accessToken;
 
-    public void sendWhatsAppMessage(String to, String message) {
 
-        try {
-            String url = apiUrl + "/" + phoneNumberId + "/messages";
+	public void sendWhatsAppMessage(String to, String message) {
 
-            RestTemplate restTemplate = new RestTemplate();
+	    if (apiUrl.isEmpty() || phoneNumberId.isEmpty() || accessToken.isEmpty()) {
+	        System.out.println("WhatsApp not configured. Skipping message send.");
+	        return;
+	    }
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.setBearerAuth(accessToken);
+	    try {
+	        String url = apiUrl + "/" + phoneNumberId + "/messages";
 
-            Map<String, Object> body = new HashMap<>();
-            body.put("messaging_product", "whatsapp");
-            body.put("to", to);
-            body.put("type", "text");
+	        RestTemplate restTemplate = new RestTemplate();
 
-            Map<String, String> textObj = new HashMap<>();
-            textObj.put("body", message);
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.setContentType(MediaType.APPLICATION_JSON);
+	        headers.setBearerAuth(accessToken);
 
-            body.put("text", textObj);
+	        Map<String, Object> body = new HashMap<>();
+	        body.put("messaging_product", "whatsapp");
+	        body.put("to", to);
+	        body.put("type", "text");
 
-            HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+	        Map<String, String> textObj = new HashMap<>();
+	        textObj.put("body", message);
+	        body.put("text", textObj);
 
-            restTemplate.postForEntity(url, request, String.class);
+	        HttpEntity<Map<String, Object>> request =
+	                new HttpEntity<>(body, headers);
 
-            System.out.println("WhatsApp message sent to: " + to);
+	        restTemplate.postForEntity(url, request, String.class);
 
-        } catch (Exception e) {
-            System.out.println("Failed to send WhatsApp message: " + e.getMessage());
-        }
-    }
+	        System.out.println("WhatsApp message sent to: " + to);
+
+	    } catch (Exception e) {
+	        System.out.println("Failed to send WhatsApp message: " + e.getMessage());
+	    }
+	}
+
 }
